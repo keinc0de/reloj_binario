@@ -24,7 +24,7 @@ class TiempoBin:
 class Interfaz(tk.Tk):
     def __init__(self):
         super(Interfaz, self).__init__()
-        self.geometry('200x150')
+        self.geometry('200x140')
         self.cnv = tk.Canvas(bg='#09100C')
         self.cnv.pack(expand=1, fill='both')
         self.valores()
@@ -32,7 +32,7 @@ class Interfaz(tk.Tk):
 
     def valores(self):
         self.cf = {
-            'pto': (30, 80, 45, 95),
+            'pto': (30, 110, 45, 125),
             'vars_h': [
                 ['h11','h12','h14','h18'],
                 ['h21','h22','h24','h28']
@@ -63,7 +63,7 @@ class Interfaz(tk.Tk):
         pto = self.cf.get('pto')
         return self.cnv.create_text(
             pto[0]+8+distx, pto[1]-disty, fill='gray40',
-            font=('Arial', 8, 'bold'), text='0'
+            font=('Bahnschrift SemiBold SemiConden', 28, 'bold'), text='0'
         )
     
     def grafica(self):
@@ -80,8 +80,8 @@ class Interfaz(tk.Tk):
         tms = self.cf.get('tms')
         for x in range(0, len(tms), 2):
             dx = x*30
-            tms[x] = self.crea_nums(dx, 70)
-            tms[x+1] = self.crea_nums(dx+25, 70)
+            tms[x] = self.crea_nums(dx, 85)
+            tms[x+1] = self.crea_nums(dx+25, 85)
 
         pto = self.cf.get('pto')
         for x in range(4):
@@ -90,6 +90,7 @@ class Interfaz(tk.Tk):
                 font=('Arial', 8, 'bold'),
                 text=self.cf.get('txtn')[x]
             )
+
 
 class RelojBin(Interfaz):
     def __init__(self):
@@ -110,9 +111,7 @@ class RelojBin(Interfaz):
         self.cnv.itemconfig(tms[indice-1], text=digitos[0])
 
     def _segundero(self):
-        self._movimiento(
-            'sb',  self.cf.get('vars_s'), 'segundos', 5
-        )
+        self._movimiento('sb',  self.cf.get('vars_s'), 'segundos', 5)
         self.cnv.after(1000, self._segundero)
         d = self.tbin.datos()
         if d.get('segundos')=='00':
@@ -121,20 +120,15 @@ class RelojBin(Interfaz):
             self._horero()
 
     def _minutero(self):
-        self._movimiento(
-            'mb', self.cf.get('vars_m'), 'minutos', 3
-        )
+        self._movimiento('mb', self.cf.get('vars_m'), 'minutos', 3)
 
     def _horero(self):
-        self._movimiento(
-            'hb', self.cf.get('vars_h'), 'horas', 1
-        )
+        self._movimiento('hb', self.cf.get('vars_h'), 'horas', 1)
 
     def inicia_contador(self):
         Thread(target=self._segundero()).start()
         Thread(target=self._minutero()).start()
         Thread(target=self._horero()).start()
-
 
 
 rbin = RelojBin()
